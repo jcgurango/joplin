@@ -44,6 +44,7 @@ import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
+import ScriptExecutor from '@joplin/lib/ScriptExecutor';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -194,7 +195,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
 					}
 				} else {
-					if (msg.indexOf('file://') === 0) {
+					if (msg.startsWith('note-script://')) {
+						const noteId = msg.substring('note-script://'.length);
+						await ScriptExecutor.executeNote(
+							noteId,
+							this.props.dispatch,
+							(message) => dialogs.inf(this, message),
+							(error) => dialogs.error(this, `Script Execution Error: ${error.message}`)
+						);
+						this.props.dispatch({ type: 'NOTE_SELECT', id: noteId });
+					} else if (msg.indexOf('file://') === 0) {
 						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
 					} else {
 						Linking.openURL(msg);
@@ -1071,6 +1081,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						highlightedKeywords={keywords}
 						themeId={this.props.themeId}
 						noteHash={this.props.noteHash}
+						noteId={this.props.noteId}
 						onCheckboxChange={this.onBodyViewerCheckboxChange}
 						onMarkForDownload={this.onMarkForDownload}
 						onLoadEnd={this.onBodyViewerLoadEnd}

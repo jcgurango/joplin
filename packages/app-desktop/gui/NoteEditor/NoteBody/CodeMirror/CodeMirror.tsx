@@ -40,6 +40,7 @@ import ErrorBoundary from '../../../ErrorBoundary';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import eventManager from '@joplin/lib/eventManager';
 import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
+import { noteBodyIsScript } from '@joplin/lib/ScriptExecutor';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -646,6 +647,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
 			}));
+
+			if (noteBodyIsScript(props.content) && !result.scriptButtonAdded) {
+				result.html = `<button type="button" onclick="ipcProxySendToHost('note-script://${props.noteId}')">Execute</button>${result.html}`;
+				result.scriptButtonAdded = true;
+			}
 
 			if (cancelled) return;
 
