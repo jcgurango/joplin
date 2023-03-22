@@ -27,6 +27,7 @@ export interface RenderResult {
 	html: string;
 	pluginAssets: RenderResultPluginAsset[];
 	cssStrings: string[];
+	scriptButtonAdded?: boolean;
 }
 
 export interface OptionsResourceModel {
