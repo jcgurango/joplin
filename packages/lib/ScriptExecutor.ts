@@ -2,6 +2,7 @@ import Folder from './models/Folder';
 import Note from './models/Note';
 import * as moment from 'moment';
 
+const asyncToGen = require('async-to-gen');
 const SCRIPT_BEGIN = '```js executable';
 const SCRIPT_END = '```';
 
@@ -25,7 +26,8 @@ class ScriptExecutor {
 			const script = parseScript(currentNote.body);
 
 			try {
-				const scriptFunction = eval(`(async function(currentNote, currentFolder, Note, Folder, moment, dispatch, print, error) {try{${script}}catch(e){error(e);}})`);
+				const transformed = asyncToGen(`const scriptFunction = (async function(currentNote, currentFolder, Note, Folder, moment, dispatch, print, error) {try{${script}}catch(e){error(e);}})`).toString();
+				const scriptFunction = eval(`${transformed}; scriptFunction`);
 				scriptFunction(currentNote, currentFolder, Note, Folder, moment, dispatch, showMessage, errorCallback);
 			} catch (e) {
 				errorCallback(e);

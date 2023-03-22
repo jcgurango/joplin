@@ -41,6 +41,7 @@
     "@joplin/utils": "~2.10",
     "@types/nanoid": "3.0.0",
     "async-mutex": "0.4.0",
+    "async-to-gen": "1.4.0",
     "base-64": "1.0.0",
     "base64-stream": "1.0.0",
     "builtin-modules": "3.3.0",

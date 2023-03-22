@@ -5,10 +5,12 @@ import useOnMessage from './hooks/useOnMessage';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
 
 const React = require('react');
-import { View } from 'react-native';
+import { Button, View } from 'react-native';
 import BackButtonDialogBox from '../BackButtonDialogBox';
 import { reg } from '@joplin/lib/registry';
 import ExtendedWebView from '../ExtendedWebView';
+import { _ } from '@joplin/lib/locale';
+import { noteBodyIsScript } from '@joplin/lib/ScriptExecutor';
 
 interface Props {
 	themeId: number;
@@ -22,6 +24,7 @@ interface Props {
 	onJoplinLinkClick: Function;
 	onCheckboxChange?: Function;
 	onMarkForDownload?: Function;
+	noteId?: string;
 	onLoadEnd?: Function;
 }
 
@@ -88,6 +91,14 @@ export default function NoteBodyViewer(props: Props) {
 	// the above no longer applies.
 	return (
 		<View style={props.style}>
+			{noteBodyIsScript(props.noteBody) ? (
+				<View style={{ paddingTop: 12, paddingBottom: 12 }}>
+					<Button
+						title={_('Execute Script')}
+						onPress={() => props.onJoplinLinkClick(`note-script://${props.noteId}`)}
+					/>
+				</View>
+			) : null}
 			<ExtendedWebView
 				webviewInstanceId='NoteBodyViewer'
 				themeId={props.themeId}
