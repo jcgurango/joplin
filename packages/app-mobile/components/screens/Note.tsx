@@ -170,6 +170,16 @@ class NoteScreenComponent extends BaseScreenComponent {
 					if (!item) throw new Error(_('No item with ID %s', itemId));
 
 					if (item.type_ === BaseModel.TYPE_NOTE) {
+						if (resourceUrlInfo.hash === 'execute-note') {
+							await ScriptExecutor.executeNote(
+								item.id,
+								this.props.dispatch,
+								(message) => dialogs.inf(this, message),
+								(error) => dialogs.error(this, `Script Execution Error: ${error.message}`)
+							);
+							this.props.dispatch({ type: 'NOTE_SELECT', id: item.id });
+						}
+
 						// Easier to just go back, then go to the note since
 						// the Note screen doesn't handle reloading a different note
 
@@ -195,16 +205,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
 					}
 				} else {
-					if (msg.startsWith('note-script://')) {
-						const noteId = msg.substring('note-script://'.length);
-						await ScriptExecutor.executeNote(
-							noteId,
-							this.props.dispatch,
-							(message) => dialogs.inf(this, message),
-							(error) => dialogs.error(this, `Script Execution Error: ${error.message}`)
-						);
-						this.props.dispatch({ type: 'NOTE_SELECT', id: noteId });
-					} else if (msg.indexOf('file://') === 0) {
+					if (msg.indexOf('file://') === 0) {
 						throw new Error(_('Links with protocol "%s" are not supported', 'file://'));
 					} else {
 						Linking.openURL(msg);
