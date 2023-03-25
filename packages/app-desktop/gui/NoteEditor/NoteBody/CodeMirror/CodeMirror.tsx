@@ -649,7 +649,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}));
 
 			if (noteBodyIsScript(props.content) && !result.scriptButtonAdded) {
-				result.html = `<button type="button" onclick="ipcProxySendToHost('note-script://${props.noteId}')">Execute</button>${result.html}`;
+				result.html = `<button type="button" onclick="ipcProxySendToHost('joplin://${props.noteId}#execute-note')">Execute</button>${result.html}`;
 				result.scriptButtonAdded = true;
 			}
 

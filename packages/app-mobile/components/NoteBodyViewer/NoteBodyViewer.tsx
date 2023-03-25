@@ -95,7 +95,7 @@ export default function NoteBodyViewer(props: Props) {
 				<View style={{ paddingTop: 12, paddingBottom: 12 }}>
 					<Button
 						title={_('Execute Script')}
-						onPress={() => props.onJoplinLinkClick(`note-script://${props.noteId}`)}
+						onPress={() => props.onJoplinLinkClick(`joplin://${props.noteId}#execute-note`)}
 					/>
 				</View>
 			) : null}
