@@ -116,6 +116,7 @@ import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo from './components/biometrics/sensorInfo';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getProfilesRootDir, getResourceDir, setDispatch } from './services/profiles';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const logger = Logger.create('root');
 
@@ -501,7 +502,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') === 'prod') {
 			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
 		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-1') });
 
 			// await db.clearForTesting();
 		}
@@ -1023,22 +1024,25 @@ class AppComponent extends React.Component {
 
 		const paperTheme = theme.appearance === ThemeAppearance.Dark ? MD3DarkTheme : MD3LightTheme;
 
+		// Wrap in a GestureHandlerRootView for gesture handler usage around the app
 		// Wrap everything in a PaperProvider -- this allows using components from react-native-paper
 		return (
-			<PaperProvider theme={{
-				...paperTheme,
-				version: 3,
-				colors: {
-					...paperTheme.colors,
-					onPrimaryContainer: theme.color5,
-					primaryContainer: theme.backgroundColor5,
-					surfaceVariant: theme.backgroundColor,
-					onSurfaceVariant: theme.color,
-					primary: theme.color,
-				},
-			}}>
-				{mainContent}
-			</PaperProvider>
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<PaperProvider theme={{
+					...paperTheme,
+					version: 3,
+					colors: {
+						...paperTheme.colors,
+						onPrimaryContainer: theme.color5,
+						primaryContainer: theme.backgroundColor5,
+						surfaceVariant: theme.backgroundColor,
+						onSurfaceVariant: theme.color,
+						primary: theme.color,
+					},
+				}}>
+					{mainContent}
+				</PaperProvider>
+			</GestureHandlerRootView>
 		);
 	}
 }
