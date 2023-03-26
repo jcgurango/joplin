@@ -5100,7 +5100,7 @@ __metadata:
     "@types/react": 17.0.53
     "@types/uuid": ^9.0.0
     async-mutex: 0.4.0
-    async-to-gen: ^1.4.0
+    async-to-gen: 1.4.0
     base-64: 1.0.0
     base64-stream: 1.0.0
     builtin-modules: 3.3.0
@@ -9799,7 +9799,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async-to-gen@npm:^1.4.0":
+"async-to-gen@npm:1.4.0":
   version: 1.4.0
   resolution: "async-to-gen@npm:1.4.0"
   dependencies:
