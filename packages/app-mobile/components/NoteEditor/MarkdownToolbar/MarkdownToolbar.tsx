@@ -30,7 +30,9 @@ interface MarkdownToolbarProps {
 	searchState: SearchState;
 	editorSettings: EditorSettings;
 	onAttach: OnAttachCallback;
+	onRecord?: OnAttachCallback;
 	style?: ViewStyle;
+	isRecording?: boolean;
 }
 
 const MarkdownToolbar = (props: MarkdownToolbarProps) => {
@@ -133,7 +135,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		active: selState.bolded,
 		onPress: editorControl.toggleBolded,
 
-		priority: 3,
+		priority: 5,
 	});
 
 	inlineFormattingBtns.push({
@@ -144,7 +146,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		active: selState.italicized,
 		onPress: editorControl.toggleItalicized,
 
-		priority: 2,
+		priority: 4,
 	});
 
 	inlineFormattingBtns.push({
@@ -178,9 +180,22 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 		priority: -3,
 	});
 
-
 	// Actions
 	const actionButtons: ButtonSpec[] = [];
+
+	if (props.onRecord) {
+		actionButtons.push({
+			icon: (
+				<FontAwesomeIcon name="microphone" style={styles.text} />
+			),
+			description: _('Record Audio'),
+			active: props.isRecording,
+			onPress: props.onRecord,
+
+			priority: 3,
+		});
+	}
+
 	actionButtons.push({
 		icon: (
 			<FontAwesomeIcon name="calendar-plus" style={styles.text}/>
@@ -208,6 +223,7 @@ const MarkdownToolbar = (props: MarkdownToolbarProps) => {
 			onDismissKeyboard();
 			props.onAttach();
 		}, [props.onAttach, onDismissKeyboard]),
+		priority: -2,
 	});
 
 	actionButtons.push({
