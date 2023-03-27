@@ -31,11 +31,13 @@ interface Props {
 	style: ViewStyle;
 	contentStyle?: ViewStyle;
 	toolbarEnabled: boolean;
+	isRecording?: boolean;
 
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
 	onAttach: OnAttachCallback;
+	onRecord: OnAttachCallback;
 }
 
 function fontFamilyFromSettings() {
@@ -376,6 +378,8 @@ function NoteEditor(props: Props, ref: any) {
 		selectionState={selectionState}
 		searchState={searchState}
 		onAttach={props.onAttach}
+		onRecord={props.onRecord}
+		isRecording={props.isRecording}
 	/>;
 
 	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)

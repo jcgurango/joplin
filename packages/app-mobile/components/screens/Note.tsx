@@ -45,6 +45,8 @@ import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 import ScriptExecutor from '@joplin/lib/ScriptExecutor';
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -71,6 +73,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fromShare: false,
 			showCamera: false,
 			noteResources: {},
+			recorder: null,
 
 			// HACK: For reasons I can't explain, when the WebView is present, the TextInput initially does not display (It's just a white rectangle with
 			// no visible text). It will only appear when tapping it or doing certain action like selecting text on the webview. The bug started to
@@ -716,6 +719,14 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.refreshResource(resource, newNote.body);
 
+
+		this.props.dispatch({
+			type: 'NOTE_UPDATE_ALL',
+			notes: [
+				newNote,
+			],
+		});
+
 		this.scheduleSave();
 	}
 
@@ -880,6 +891,36 @@ class NoteScreenComponent extends BaseScreenComponent {
 		if (buttonId === 'takePhoto') this.takePhoto_onPress();
 		if (buttonId === 'attachFile') void this.attachFile_onPress();
 		if (buttonId === 'attachPhoto') void this.attachPhoto_onPress();
+	}
+
+	public async toggleRecording() {
+		if (this.state.recorder) {
+			const result = await this.state.recorder.stopRecorder();
+			this.setState({ recorder: null });
+			await this.attachFile({
+				uri: result,
+				type: 'audio/mp4',
+			}, 'audio');
+		} else {
+			const grants = await PermissionsAndroid.requestMultiple([
+				PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+				PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+				PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+			]);
+
+			if (
+				grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+					PermissionsAndroid.RESULTS.GRANTED &&
+				grants['android.permission.READ_EXTERNAL_STORAGE'] ===
+					PermissionsAndroid.RESULTS.GRANTED &&
+				grants['android.permission.RECORD_AUDIO'] ===
+					PermissionsAndroid.RESULTS.GRANTED
+			) {
+				const recorder = new AudioRecorderPlayer();
+				await recorder.startRecorder();
+				this.setState({ recorder });
+			}
+		}
 	}
 
 	public menuOptions() {
@@ -1138,6 +1179,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					onAttach={() => this.showAttachMenu()}
+					onRecord={() => this.toggleRecording()}
+					isRecording={!!this.state.recorder}
 					style={{
 						...editorStyle,
 						paddingLeft: 0,
