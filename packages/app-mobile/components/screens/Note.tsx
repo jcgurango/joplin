@@ -719,7 +719,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.refreshResource(resource, newNote.body);
 
-
 		this.props.dispatch({
 			type: 'NOTE_UPDATE_ALL',
 			notes: [
@@ -900,6 +899,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			await this.attachFile({
 				uri: result,
 				type: 'audio/mp4',
+				name: `Voice Note ${(new Date()).toLocaleString()}`,
 			}, 'audio');
 		} else {
 			const grants = await PermissionsAndroid.requestMultiple([
