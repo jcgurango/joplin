@@ -70,6 +70,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 		let folder = Object.assign({}, this.state.folder);
 
 		try {
+			if (folder.id && !(await Folder.canNestUnder(folder.id, folder.parent_id))) throw new Error(_('Cannot move notebook to this location'));
 			folder = await Folder.save(folder, { userSideValidation: true });
 		} catch (error) {
 			dialogs.error(this, _('The notebook could not be saved: %s', error.message));
@@ -134,7 +135,7 @@ const FolderScreen = connect(state => {
 
 const styles = StyleSheet.create({
 	folderPickerContainer: {
-		height: 42,
+		height: 46,
 		paddingLeft: 14,
 		paddingRight: 14,
 		paddingTop: 12,
