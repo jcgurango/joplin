@@ -74,6 +74,7 @@ packages/turndown/
 packages/pdf-viewer/dist
 plugin_types/
 readme/
+packages/react-native-vosk/lib/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
@@ -417,12 +418,15 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/search.js
 packages/app-mobile/components/side-menu-content.js
+packages/app-mobile/components/voiceTyping/VoiceTypingDialog.js
 packages/app-mobile/gulpfile.js
 packages/app-mobile/root.js
 packages/app-mobile/services/AlarmServiceDriver.android.js
 packages/app-mobile/services/AlarmServiceDriver.ios.js
 packages/app-mobile/services/e2ee/RSA.react-native.js
 packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/voiceTyping/vosk.dummy.js
+packages/app-mobile/services/voiceTyping/vosk.js
 packages/app-mobile/setupQuickActions.js
 packages/app-mobile/tools/buildInjectedJs.js
 packages/app-mobile/utils/ShareExtension.js
@@ -480,6 +484,7 @@ packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetRegistry.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.js
+packages/lib/WelcomeUtils.js
 packages/lib/array.js
 packages/lib/callbackUrlUtils.js
 packages/lib/callbackUrlUtils.test.js
@@ -515,6 +520,7 @@ packages/lib/import-enex-md-gen.js
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex.js
 packages/lib/locale.js
+packages/lib/locale.test.js
 packages/lib/markdownUtils.js
 packages/lib/markdownUtils.test.js
 packages/lib/markdownUtils2.test.js
@@ -841,6 +847,7 @@ packages/renderer/noteStyle.js
 packages/renderer/pathUtils.js
 packages/renderer/utils.js
 packages/tools/build-release-stats.js
+packages/tools/build-welcome.js
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.test.js
 packages/tools/bundleDefaultPlugins.js
