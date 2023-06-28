@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.11.4",
+  "version": "2.11.5",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -163,7 +163,7 @@
     "react-datetime": "3.2.0",
     "react-dom": "18.2.0",
     "react-redux": "8.0.5",
-    "react-select": "5.7.2",
+    "react-select": "5.7.3",
     "react-toggle-button": "2.2.0",
     "react-tooltip": "4.5.1",
     "redux": "4.2.1",
